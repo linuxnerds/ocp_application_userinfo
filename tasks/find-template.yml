@@ -1,0 +1,26 @@
+---
+- name: create pre-req for userinfo
+  delegate_to: localhost
+  become: false                                                                                                                                                                                
+  block:
+    - name: create userinfo dir
+      file:
+        path: "{{ ocp_application_userinfo_tasks_dir }}"
+        state: directory
+        recurse: true
+        mode: 0777
+
+    - name: create userinfo tasks file from template
+      vars:
+        findme:
+          - ./templates/{{ _info.kind }}.yml.j2
+          - ./templates/universal.yml.j2
+      template:
+        src: "{{ lookup('first_found', findme)}}"
+        dest: "{{ ocp_application_userinfo_tasks_dir }}/{{ _c_index }}_{{ _v_index }}-{{_info.kind}}.yml"
+        mode: 0777
+   
+- name: execute userinfo
+  when: _login.userinfo is defined
+  include_tasks: "{{ ocp_application_userinfo_tasks_dir }}/{{ _c_index }}_{{ _v_index }}-{{_info.kind}}.yml"
+

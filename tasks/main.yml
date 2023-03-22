@@ -1,0 +1,7 @@
+---
+- name: run ocp application userinfo tasks
+  include_tasks: ./loop-userinfo.yml
+  loop: "{{ ocp_application_userinfo_list }}"
+  loop_control:
+    loop_var: _login
+    index_var: _c_index

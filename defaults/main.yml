@@ -1,0 +1,41 @@
+---
+# Path for userinfo task files
+ocp_application_userinfo_tasks_dir: /tmp/validations/{{ guid[:5] | d('common') }}/userinfo
+# Boolean to remmove userinfo directory at the end
+ocp_application_userinfo_remove_userinfo_dir: true
+
+# Example list of cluster and userinfo
+ocp_application_userinfo_list:
+  - cluster: 
+      name: local
+    validations: 
+      - kind: Route
+        name: openshift-gitops-server
+        namespace: openshift-gitops
+        retries: 1
+
+##------------------------------------------##
+## Available options    
+##------------------------------------------##
+# ocp_application_userinfo_list:
+#   - cluster: 
+#       name: string
+#       host: url
+#       username: string
+#       password: string
+#       onfail: string
+#     validations: 
+#       - kind: string
+#         name: string
+#         namespace: string
+#         retries: integer
+#         delay: integer
+#         password: string
+#         force_basic_auth: string
+#         status_code: integer
+#         operator: string
+#         pipeline: string
+#         state: string
+#         port: string
+#         conditions: [list]
+#         onfail: string

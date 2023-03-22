@@ -1,0 +1,48 @@
+---
+- name: using auth to log into cluster
+  when:
+    - _login.cluster.host is defined
+    - _login.cluster.username is defined
+    - _login.cluster.password is defined
+    - _login.userinfo is defined
+  block:
+    - name: Print
+      debug:
+        msg: "Log into {{ _login.cluster.name | default(_login.cluster.host) }} cluster"
+
+    - name: Log into {{ _login.cluster.name | d(_login.cluster.host) }} cluster 
+      k8s_auth:
+        host: "{{ _login.cluster.host }}"
+        username: "{{ _login.cluster.username }}"
+        password: "{{ _login.cluster.password }}"
+        validate_certs: false
+      register: _r_auth_cluster
+      retries: 240
+      delay: 15
+      until:
+      - _r_auth_cluster.k8s_auth.api_key is defined
+
+- name: using local .kube/config to log into cluster
+  when:
+    - _login.cluster.host is not defined
+    - _login.cluster.username is not defined
+    - _login.cluster.password is not defined
+    - _login.userinfo is defined
+  debug:
+    msg: "Log into {{ _login.cluster.name | d('local') }} cluster"
+
+- name: find template and run userinfo
+  when: _login.userinfo is defined
+  include_tasks: ./find-template.yml
+  loop: "{{ _login.userinfo }}"
+  loop_control:
+    loop_var: _info
+    index_var: _v_index
+
+- name: Remove userinfo dir
+  delegate_to: localhost
+  become: false  
+  when: ocp_application_userinfo_remove_userinfo_dir | bool
+  file:
+    path: "{{ ocp_application_userinfo_tasks_dir }}"
+    state: absent
