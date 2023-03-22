@@ -20,7 +20,7 @@
         dest: "{{ ocp_application_userinfo_tasks_dir }}/{{ _c_index }}_{{ _v_index }}-{{_info.kind}}.yml"
         mode: 0777
    
-- name: execute userinfo
-  when: _login.userinfo is defined
-  include_tasks: "{{ ocp_application_userinfo_tasks_dir }}/{{ _c_index }}_{{ _v_index }}-{{_info.kind}}.yml"
+# - name: execute userinfo
+#   when: _login.userinfo is defined
+#   include_tasks: "{{ ocp_application_userinfo_tasks_dir }}/{{ _c_index }}_{{ _v_index }}-{{_info.kind}}.yml"
 

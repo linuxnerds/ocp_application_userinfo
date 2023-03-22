@@ -1,6 +1,6 @@
 ---
 # Path for userinfo task files
-ocp_application_userinfo_tasks_dir: /tmp/validations/{{ guid[:5] | d('common') }}/userinfo
+ocp_application_userinfo_tasks_dir: /tmp/userinfo/{{ guid[:5] | d('common') }}/
 # Boolean to remmove userinfo directory at the end
 ocp_application_userinfo_remove_userinfo_dir: true
 
@@ -8,7 +8,7 @@ ocp_application_userinfo_remove_userinfo_dir: true
 ocp_application_userinfo_list:
   - cluster: 
       name: local
-    validations: 
+    userinfo: 
       - kind: Route
         name: openshift-gitops-server
         namespace: openshift-gitops
@@ -24,7 +24,7 @@ ocp_application_userinfo_list:
 #       username: string
 #       password: string
 #       onfail: string
-#     validations: 
+#     userinfo: 
 #       - kind: string
 #         name: string
 #         namespace: string
